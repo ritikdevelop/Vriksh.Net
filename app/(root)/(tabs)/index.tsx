@@ -18,4 +18,8 @@ export default function Home() {
       </SafeAreaView>
     </View>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b73329f5ceb5cbcb2ae414f79a1b0d1d50dc467b
