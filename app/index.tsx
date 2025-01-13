@@ -1,10 +1,78 @@
-import { Text, View } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import icons from "@/constants/icons";
+import { login } from "@/lib/appwrite";
+import { Redirect } from "expo-router";
+import { useGlobalContext } from "@/lib/global-provider";
+import images from "@/constants/images";
 
-export default function Index() {
+const SignIn = () => {
+
+  const { refetch, loading, isLogged } = useGlobalContext();
+
+  if (!loading && isLogged) {
+    return <Redirect href="/(tabs)" />;
+  }
+
+  const handleLogin = async () => {
+    const result = await login();
+    if (result) {
+      // console.log("Login Success");
+      refetch({});
+    } else {
+      Alert.alert("Error", "Failed to login");
+    }
+  };
   return (
-    <View className="flex-1 justify-center items-center">
-      <Text className="text-red-500 text-3xl text-center">Hello</Text>
-    </View>
+    <SafeAreaView className="bg-white h-full">
+      <ScrollView contentContainerClassName="h-full">
+        <Image
+          source={images.logo}
+          className="w-full h-4/6"
+          resizeMode="contain"
+        />
+
+        <View className="px-6">
+          <Text className="text-base text-center uppercase font-rubik text-black-200">
+            Welcome to Vriksh.Net
+          </Text>
+
+          <Text className="text-2xl font-rubik-bold text-black-300 text-center mt-2">
+            Let's Get You Closer to {"\n"}
+            <Text className="text-primary-300">Your Better Business Grow</Text>
+          </Text>
+
+          <Text className="text-lg font-rubik text-black-100 text-center mt-6">
+            Login to Vriksh.Net to continue
+          </Text>
+
+          <TouchableOpacity
+            onPress={handleLogin}
+            className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
+          >
+            <View className="flex flex-row items-center justify-center">
+              <Image
+                source={icons.google}
+                className="w-5 h-5"
+                resizeMode="contain"
+              />
+              <Text className="text-lg font-rubik-medium text-blue-300 ml-2">
+                Continue with Google
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
-}
+};
+
+export default SignIn;
